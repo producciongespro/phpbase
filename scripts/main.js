@@ -3,6 +3,10 @@ $(document).ready(function () {
         e.preventDefault();
         enviar_datos();
     });
+    $("#btnActualizar").click(function (e) { 
+        e.preventDefault();
+        actualizar_datos();
+    });
 });
 
 function enviar_datos() {
@@ -24,5 +28,27 @@ $.ajax({
             $("#resultado").html(resultado.mensaje);
         }
 });
+}
 
+function actualizar_datos() {
+    var id= $("#id").val();
+    var titulo = $("#titulo").val();
+    var noticia = $("#noticia").val();
+    var parametros = {
+        "titulo" : titulo,
+        "noticia" : noticia
+};
+$.ajax({
+        data:  parametros, //datos que se envian a traves de ajax
+        url:   'webservices/actualizar_generico.php?tabla_destino=noticias&id='+id, //archivo que recibe la peticion
+        type:  'post', //método de envio
+        beforeSend: function () {
+                $("#resultado").html("Procesando, espere por favor...");
+        },
+        success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
+             var resultado = JSON.parse(response);
+             $("#resultado").html(resultado.mensaje);
+                        
+        }
+});
 }
